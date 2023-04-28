@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 dotenv.config();
 
+//const db = "mongodb://0.0.0.0:27017/verticalsols";
 const db =
   "mongodb+srv://osamabalghari:TefYCd5ESlHBcnYT@cluster0.j8pyx.mongodb.net/?retryWrites=true&w=majority";
-
 export async function connectDB() {
   try {
     await mongoose.connect(db, {

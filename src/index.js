@@ -15,7 +15,7 @@ server.use(
 );
 server.use("/api/contact", contactus);
 
-server.listen(5000, () => {
+server.listen(process.env.SERVER_PORT, () => {
   console.log("Server listening on port " + `${process.env.SERVER_PORT}`);
 });
 

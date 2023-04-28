@@ -14,7 +14,7 @@ server.use(
   express.urlencoded({ limit: "50mb", parameterLimit: 1000000, extended: true })
 );
 server.use("/api/contact", contactus);
-const port = process.env.SERVER_PORT || 5003;
+const port = process.env.PORT || 5003;
 server.listen(port, () => {
   console.log("Server listening on port " + `${port}`);
 });

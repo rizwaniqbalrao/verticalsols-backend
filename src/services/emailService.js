@@ -2,8 +2,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import sgMail from "@sendgrid/mail";
 
-//import client from '@sendgrid/client'
-//client.setApiKey('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')
 sgMail.setApiKey(
   "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"
 );

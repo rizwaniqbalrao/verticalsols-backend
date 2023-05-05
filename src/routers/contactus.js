@@ -29,38 +29,16 @@ router.post("/contactus", async (req, res) => {
       });
     } else {
       return res.status(204).send({
-        meta: { success: false, message: "Error happened" },
+        success: false,
+        message: "Error happened",
       });
     }
   } catch (error) {
     return res.status(400).send({
-      meta: { success: false, message: error.message },
+      success: false,
+      message: error.message,
     });
   }
 });
-router.post("/getappointment", async (req, res) => {
-  try {
-    const { fullName, emailAddress, writeMessage } = req.body;
-    const createClothing = await ContactUs.create({
-      fullName: fullName,
-      emailAddress: emailAddress,
-      phoneNumber: phoneNumber,
-      selectRequirments: selectRequirments,
-      writeMessage: writeMessage,
-    });
-    if (createClothing) {
-      return res.status(200).send({
-        meta: { success: true },
-        data: createClothing,
-      });
-    }
-    return res.status(204).send({
-      meta: { success: false },
-    });
-  } catch (error) {
-    return res.status(400).send({
-      meta: { success: false },
-    });
-  }
-});
+
 export default router;

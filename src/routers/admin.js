@@ -1,0 +1,80 @@
+import { Router } from "express";
+import Admin from "../models/admin.js";
+import { comparePassword, hashPassword } from "../utilities/passwordUtils.js";
+import {
+  generateAccessToken,
+  getUserIdFromToken,
+  verifyAuthToken,
+} from "../services/authentication.js";
+import { s3uploadImage, unlinkFile, upload } from "../utilities/aws.js";
+
+const router = Router();
+
+router.post("/login", async (req, res) => {
+  try {
+    const { emailAddress, password } = req.body;
+    const adminEmail = emailAddress.toLowerCase();
+    const adminData = await Admin.findOne({ emailAddress: adminEmail });
+    const checkPassword = await comparePassword(password, adminData?.password);
+    if (adminData && checkPassword) {
+      return res.status(200).send({
+        status: true,
+        message: "Admin logged in successfully",
+        data: adminData,
+      });
+    }
+    return res.status(203).send({
+      status: false,
+      message: "Wrong email or password",
+    });
+  } catch (error) {
+    return res.status(400).send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+router.post(
+  "/addsubadmin",
+  verifyAuthToken(),
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const { fullName, emailAddress, password, role } = req.body;
+      const user = await Admin.findOne({ emailAddress: emailAddress });
+      if (!user) {
+        const file = req.file;
+        const result = await s3uploadImage(file);
+        await unlinkFile(file.path);
+        const locationPath = result.Key;
+        const subAdmin = await Admin.create({
+          fullName: fullName,
+          emailAddress: emailAddress,
+          password: await hashPassword(password),
+          profilePic: locationPath,
+          role: role,
+        });
+        if (subAdmin) {
+          const token = await generateAccessToken(subAdmin);
+          await subAdmin.updateOne({ auth_token: token });
+          return res.status(200).send({
+            status: true,
+            message: "User Created Successfully",
+            data: subAdmin,
+          });
+        }
+      }
+      return res.status(203).send({
+        status: false,
+        message: "User Already Registered",
+      });
+    } catch (error) {
+      return res.status(400).send({
+        status: false,
+        message: error.message,
+      });
+    }
+  }
+);
+
+export default router;

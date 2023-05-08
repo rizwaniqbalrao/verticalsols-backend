@@ -4,9 +4,10 @@ const BlogsSchema = new Schema(
   {
     description: String,
     blogTag: String,
-    blogImage: String,
+    blogThumbnail: String,
     blogDescription: String,
-    userId: String,
+    blogCategorie: String,
+    author: {},
   },
   { timestamps: { createdAt: "created_at" } }
 );

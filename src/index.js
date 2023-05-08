@@ -4,11 +4,11 @@ import * as dotenv from "dotenv";
 import contactus from "./routers/contactus.js";
 import admin from "./routers/admin.js";
 import blogs from "./routers/blogs.js";
+import teammembers from "./routers/teammembers.js";
 import { connectDB } from "./middleware/db.js";
 import Admin from "./models/admin.js";
 import { hashPassword } from "./utilities/passwordUtils.js";
 import { generateAccessToken } from "./services/authentication.js";
-import path from "path";
 
 dotenv.config();
 const server = express();
@@ -43,6 +43,7 @@ server.use(
 server.use("/api/contact", contactus);
 server.use("/api/admin", admin);
 server.use("/api/blogs", blogs);
+server.use("/api/team", teammembers);
 
 const port = process.env.PORT || 5003;
 server.listen(port, () => {

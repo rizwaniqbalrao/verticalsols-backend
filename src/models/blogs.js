@@ -3,7 +3,7 @@ import { model, Schema } from "mongoose";
 const BlogsSchema = new Schema(
   {
     description: String,
-    blogTag: String,
+    blogTitle: String,
     blogThumbnail: String,
     blogDescription: String,
     blogCategorie: String,

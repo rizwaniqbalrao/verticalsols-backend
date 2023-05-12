@@ -15,7 +15,7 @@ router.post("/addblog", verifyAuthToken(), async (req, res) => {
   try {
     const {
       blogThumbnail,
-      blogTag,
+      blogTitle,
       blogDescription,
       description,
       blogCategorie,
@@ -29,7 +29,7 @@ router.post("/addblog", verifyAuthToken(), async (req, res) => {
           fullName: author.fullName,
           profilePic: author.profilePic,
         },
-        blogTag: blogTag,
+        blogTitle: blogTitle,
         blogThumbnail: result,
         blogDescription: blogDescription,
         description: description,
@@ -65,19 +65,27 @@ router.post("/editblog", verifyAuthToken(), async (req, res) => {
       blogCategorie,
     } = req.body;
     const blog = await Blogs.findOne({ _id: blogId });
+    console.log("blog==>>>>>>", blog);
     if (blog) {
-      // const result = await s3ImageUpload(blogThumbnail);
+      if (blogThumbnail) {
+        const result = await s3ImageUpload(blogThumbnail);
+        await blog.updateOne({ blogThumbnail: result });
+        return res.status(200).send({
+          success: true,
+          message: "Pic Update Successfully",
+        });
+      }
       const addBlog = await blog.updateOne({
         blogTag: blogTag,
-        // blogThumbnail: result,
         blogDescription: blogDescription,
         description: description,
+        blogThumbnail: blog.blogThumbnail,
         blogCategorie: blogCategorie,
       });
       if (addBlog) {
         return res.status(200).send({
           success: true,
-          message: "Blog Added Successfully",
+          message: "Blog Update Successfully",
         });
       } else {
         return res.status(204).send({
@@ -116,7 +124,7 @@ router.post("/deleteblog", verifyAuthToken(), async (req, res) => {
 });
 router.post("/addeditorpic", async (req, res) => {
   try {
-    const { editorImage, editorImageNew } = req.body;
+    const { editorImage } = req.body;
     const addEditorPic = await s3ImageUpload(editorImage);
     return res.status(200).send({
       success: true,
@@ -135,6 +143,89 @@ router.get("/getblogs", async (req, res) => {
     const blogs = await Blogs.find({});
     res.status(200).json({ data: blogs });
   } catch (error) {}
+});
+router.post("/addcomment", async (req, res) => {
+  try {
+    const { blogId, userName, emailAddress, comment } = req.body;
+    const blog = await Blogs.findOne({ _id: blogId });
+    if (blog) {
+    }
+  } catch (error) {}
+});
+router.post("/singleblog", async (req, res) => {
+  try {
+    const { blogId } = req.body;
+    console.log("blogId==>>>>", blogId);
+    const blog = await Blogs.findOne({ _id: blogId });
+    if (blog) {
+      return res.status(200).send({
+        success: true,
+        message: "Blog added successfully",
+        data: blog,
+      });
+    } else {
+      return res.status(202).send({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+router.post("/recentblogs", async (req, res) => {
+  try {
+    const blog = await Blogs.find({});
+    if (blog) {
+      const recentBlogs = blog.slice(-3);
+      return res.status(200).send({
+        success: true,
+        message: "Blog not found",
+        data: recentBlogs,
+      });
+    } else {
+      return res.status(202).send({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+router.post("/filtertags", async (req, res) => {
+  try {
+    const { blogCategory } = req.body;
+    const blog = await Blogs.find({});
+    if (blog) {
+      const filterTags = blog.filter((value) => {
+        let category = value.blogCategorie === "API";
+        console.log(category == true);
+      });
+      console.log("filterTags==>>>>>", filterTags);
+      return res.status(200).send({
+        success: true,
+        message: "Blog not found",
+        data: filterTags,
+      });
+    } else {
+      return res.status(202).send({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message,
+    });
+  }
 });
 
 export default router;

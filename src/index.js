@@ -5,6 +5,7 @@ import contactus from "./routers/contactus.js";
 import admin from "./routers/admin.js";
 import blogs from "./routers/blogs.js";
 import teammembers from "./routers/teammembers.js";
+import pricingplan from "./routers/pricing.js";
 import { connectDB } from "./middleware/db.js";
 import Admin from "./models/admin.js";
 import { hashPassword } from "./utilities/passwordUtils.js";
@@ -44,6 +45,7 @@ server.use("/api/contact", contactus);
 server.use("/api/admin", admin);
 server.use("/api/blogs", blogs);
 server.use("/api/team", teammembers);
+server.use("/api/pricing", pricingplan);
 
 const port = process.env.PORT || 5003;
 server.listen(port, () => {

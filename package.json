@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/index.js",
+    "ngrok": "ngrok http 5000"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,7 @@
     "jwt-decode": "^3.1.2",
     "mongoose": "^7.0.3",
     "multer": "^1.4.5-lts.1",
+    "ngrok": "^5.0.0-beta.2",
     "nodemon": "^2.0.22",
     "sharp": "^0.32.1",
     "webpack": "^5.31.2",

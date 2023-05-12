@@ -15,13 +15,18 @@ router.post("/login", async (req, res) => {
     const { emailAddress, password } = req.body;
     const adminEmail = emailAddress.toLowerCase();
     const adminData = await Admin.findOne({ emailAddress: adminEmail });
-    const checkPassword = await comparePassword(password, adminData?.password);
-    if (adminData && checkPassword) {
-      return res.status(200).send({
-        status: true,
-        message: "Admin logged in successfully",
-        data: adminData,
-      });
+    if (adminData) {
+      const checkPassword = await comparePassword(
+        password,
+        adminData?.password
+      );
+      if (adminData && checkPassword) {
+        return res.status(200).send({
+          status: true,
+          message: "Admin logged in successfully",
+          data: adminData,
+        });
+      }
     }
     return res.status(203).send({
       status: false,

@@ -36,7 +36,8 @@ const autoCreate = async () => {
 };
 autoCreate();
 
-server.use(cors({ credentials: true, origin: process.env.FRONTEND_LINK }));
+server.use(cors());
+server.options("*", cors());
 server.use(express.json({ limit: "50mb", extended: true }));
 server.use(
   express.urlencoded({ limit: "50mb", parameterLimit: 1000000, extended: true })

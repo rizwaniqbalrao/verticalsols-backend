@@ -42,12 +42,15 @@ router.post("/login", async (req, res) => {
 router.post("/addsubadmin", verifyAuthToken(), async (req, res) => {
   try {
     const { profilePic, fullName, emailAddress, password, role } = req.body;
-    const user = await Admin.findOne({ emailAddress: emailAddress });
+
+    const user = await Admin.findOne({
+      emailAddress: emailAddress.toLowerCase(),
+    });
     if (!user) {
       const result = await s3ImageUpload(profilePic);
       const subAdmin = await Admin.create({
         fullName: fullName,
-        emailAddress: emailAddress,
+        emailAddress: emailAddress.toLowerCase(),
         password: await hashPassword(password),
         profilePic: result,
         role: role,

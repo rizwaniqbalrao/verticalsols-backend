@@ -8,10 +8,8 @@ const welcomeEmail = async (email) => {
   const msg = {
     to: email,
     from: {
-      logo_url:
-        "https://www.verticalsols.com/assets/images/logos/verticalsolsHeaderLogo.svg",
       name: "Verticalsols Pvt. Ltd.",
-      email: "info@verticalsols.com",
+      email: "operations@verticalsols.com",
     },
     subject: "Welcome",
     text: `Your query recieved at vertical souls`,

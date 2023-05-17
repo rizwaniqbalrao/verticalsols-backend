@@ -68,5 +68,25 @@ const deleteMultipleImage = async (fileName) => {
     console.log(error.message);
   }
 };
+const uploadFile = async (fileContent) => {
+  const mimeType = fileContent.split(";")[0].split("/")[1];
+  const buffer = Buffer.from(
+    fileContent.replace(/^data:application\/\w+;base64,/, ""),
+    "base64"
+  );
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET,
+    Key: Date.now() + "." + mimeType,
+    Body: buffer, // Replace fileContent with the actual file content or a readable stream
+    ContentType: `application/${mimeType}`,
+  };
+  return await s3Upload(params);
+};
 
-export { s3ImageUpload, deleteImage, deleteMultipleImage, s3Upload };
+export {
+  s3ImageUpload,
+  deleteImage,
+  deleteMultipleImage,
+  s3Upload,
+  uploadFile,
+};

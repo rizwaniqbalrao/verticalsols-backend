@@ -10,12 +10,30 @@ const ContactUsSchema = new Schema(
     phoneNumber: {
       type: String,
     },
-    listType: String,
     selectRequirments: String,
     writeMessage: String,
+    file: String,
   },
   { timestamps: { createdAt: "created_at" } }
 );
 
 const ContactUs = model("contactus", ContactUsSchema);
-export default ContactUs;
+
+const MakeaCallSchema = new Schema(
+  {
+    fullName: String,
+    emailAddress: {
+      type: String,
+      required: true,
+    },
+    phoneNumber: {
+      type: String,
+    },
+    writeMessage: String,
+    date: String,
+  },
+  { timestamps: { createdAt: "created_at" } }
+);
+
+const MakeaCall = model("makecall", MakeaCallSchema);
+export { ContactUs, MakeaCall };

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ContactUs, MakeaCall } from "../models/contactus.js";
 import { receivedEmail, welcomeEmail } from "../services/emailService.js";
-import { s3ImageUpload, s3Upload, uploadFile } from "../utilities/aws.js";
+import { uploadFile } from "../utilities/aws.js";
 
 const router = Router();
 
@@ -30,8 +30,8 @@ router.post("/contactus", async (req, res) => {
     });
 
     if (createContactUs) {
-      await welcomeEmail(emailAddress, fullName);
-      await receivedEmail("info@verticalsols.com", emailAddress, fullName);
+      //await welcomeEmail(emailAddress, fullName);
+      //await receivedEmail("info@verticalsols.com", emailAddress, fullName);
       return res.status(200).send({
         success: true,
         message:
@@ -63,8 +63,8 @@ router.post("/makeacall", async (req, res) => {
     });
 
     if (createMakeCall) {
-      //  await welcomeEmail(emailAddress, fullName);
-      //await receivedEmail("info@verticalsols.com", emailAddress, fullName);
+      await welcomeEmail(emailAddress, fullName);
+      await receivedEmail("info@verticalsols.com", emailAddress, fullName);
       return res.status(200).send({
         success: true,
         message:
@@ -102,9 +102,10 @@ router.get("/getmakecall", async () => {
 router.get("/getquote", async (req, res) => {
   try {
     const getQuote = await ContactUs.find({});
+    const reversedArray = [...getQuote].reverse();
     return res.status(200).send({
       success: true,
-      data: getQuote,
+      data: reversedArray,
       message: "Message sent successfully our respondent will contact you soon",
     });
   } catch (error) {

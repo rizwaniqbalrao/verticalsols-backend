@@ -65,7 +65,7 @@ router.post("/editblog", verifyAuthToken(), async (req, res) => {
       blogCategorie,
     } = req.body;
     const blog = await Blogs.findOne({ _id: blogId });
-    console.log("blog==>>>>>>", blog);
+
     if (blog) {
       if (blogThumbnail) {
         const result = await s3ImageUpload(blogThumbnail);
@@ -206,9 +206,8 @@ router.post("/filtertags", async (req, res) => {
     if (blog) {
       const filterTags = blog.filter((value) => {
         let category = value.blogCategorie === "API";
-        console.log(category == true);
       });
-      console.log("filterTags==>>>>>", filterTags);
+
       return res.status(200).send({
         success: true,
         message: "Blog not found",

@@ -84,13 +84,21 @@ router.post("/getpricing", async (req, res) => {
   try {
     const { category } = req.body;
     const pricing = await Pricing.find({ category: category });
+
     res.status(200).json({ status: true, data: pricing });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 });
 router.get("/getallpricing", verifyAuthToken(), async (req, res) => {
   try {
     const pricing = await Pricing.find({});
     res.status(200).json({ status: true, data: pricing });
-  } catch (error) {}
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message,
+    });
+  }
 });
 export default router;

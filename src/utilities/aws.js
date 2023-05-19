@@ -62,7 +62,7 @@ const deleteMultipleImage = async (fileName) => {
 
   try {
     let deletedData = await s3.deleteObjects(params).promise();
-    console.log("deletedData", deletedData);
+
     return deletedData;
   } catch (error) {
     console.log(error.message);

@@ -4,13 +4,7 @@ import sgMail from "@sendgrid/mail";
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const welcomeEmail = async (email, name) => {
-  const randomCode = async () => {
-    // let random = 123456
-    // return random
-    return Math.floor(100000 + Math.random() * 900000);
-  };
-  const verifyCode = await randomCode();
+const welcomeEmail = async (email, name, orderNumber) => {
   const msg = {
     to: email,
     from: {
@@ -971,7 +965,7 @@ const welcomeEmail = async (email, name) => {
                                       "
                                     >
                                       <p style="line-height: 140%">
-                                        #${verifyCode}
+                                        #${orderNumber}
                                       </p>
                                     </div>
                                   </td>
@@ -1938,7 +1932,12 @@ const welcomeEmail = async (email, name) => {
       console.error(error);
     });
 };
-const receivedEmail = async (companyEmail, clientEmail, clientName) => {
+const receivedEmail = async (
+  companyEmail,
+  clientEmail,
+  clientName,
+  orderNumber
+) => {
   const msg = {
     to: companyEmail,
     from: {
@@ -1949,6 +1948,7 @@ const receivedEmail = async (companyEmail, clientEmail, clientName) => {
     text: `Your query recieved at vertical souls`,
     html: `<h1>${clientEmail}</h1>
     <p>${clientName}</p>
+    <p>${orderNumber}
     `,
   };
   await sgMail

@@ -151,4 +151,20 @@ router.post("/getportfoliodetails", async (req, res) => {
   }
 });
 
+router.post("/getrecentportfolios", async (req, res) => {
+  try {
+    const portfolio = await Portfolio.find({});
+    const recentPortfolios = portfolio.slice(0, 31);
+    if (portfolio) {
+      return res.status(200).json({
+        success: true,
+        message: "Portfolio Find Successfully",
+        data: recentPortfolios,
+      });
+    }
+  } catch (error) {
+    res.status(202).json({ status: false, message: error.message });
+  }
+});
+
 export default router;

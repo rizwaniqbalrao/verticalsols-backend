@@ -26,6 +26,8 @@ const autoCreate = async () => {
         emailAddress: "admin@verticalsols.com",
         password: await hashPassword("admin"),
         role: "superadmin",
+        fullName: "",
+        profilePic: "",
       });
       const token = await generateAccessToken(registerAdmin);
       await Admin.updateOne({ auth_token: token });

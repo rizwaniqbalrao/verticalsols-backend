@@ -17,6 +17,7 @@ router.post("/contactus", async (req, res) => {
       date,
       contactType,
     } = req.body;
+
     const result = file ? await uploadFile(file) : "";
     const createContactUs = await ContactUs.create({
       contactType: contactType,

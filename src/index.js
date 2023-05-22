@@ -29,7 +29,6 @@ const autoCreate = async () => {
         role: "superadmin",
         fullName: "",
         profilePic: "",
-        auth_token: "",
       });
       const token = await generateAccessToken(registerAdmin);
       await registerAdmin.updateOne({ auth_token: token });

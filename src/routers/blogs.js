@@ -72,6 +72,7 @@ router.post("/editblog", verifyAuthToken(), async (req, res) => {
       blogDescription,
       description,
       blogCategorie,
+      blogTitle,
     } = req.body;
     const blog = await Blogs.findOne({ _id: blogId });
 
@@ -85,6 +86,7 @@ router.post("/editblog", verifyAuthToken(), async (req, res) => {
         });
       }
       const addBlog = await blog.updateOne({
+        blogTitle: blogTitle,
         blogTag: blogTag,
         blogDescription: blogDescription,
         description: description,
@@ -97,7 +99,7 @@ router.post("/editblog", verifyAuthToken(), async (req, res) => {
           message: "Blog Update Successfully",
         });
       } else {
-        return res.status(204).send({
+        return res.status(200).send({
           success: false,
           message: "Error happened",
         });

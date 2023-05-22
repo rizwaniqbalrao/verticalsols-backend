@@ -24,28 +24,37 @@ router.post("/addblog", verifyAuthToken(), async (req, res) => {
     if (u_id) {
       const author = await Admin.findOne({ _id: u_id });
       const result = await s3ImageUpload(blogThumbnail);
-      const addBlog = await Blogs.create({
-        author: {
-          fullName: author.fullName,
-          profilePic: author.profilePic,
-        },
-        blogTitle: blogTitle,
-        blogThumbnail: result,
-        blogDescription: blogDescription,
-        description: description,
-        blogCategorie: blogCategorie,
-      });
-      if (addBlog) {
-        return res.status(200).send({
-          success: true,
-          message: "Blog Added Successfully",
+      const titleHyphens = blogTitle.replace(/\s/g, "-");
+      const blog = await Blogs.findOne({ titleHyphens: titleHyphens });
+      if (!blog) {
+        const addBlog = await Blogs.create({
+          author: {
+            fullName: author.fullName,
+            profilePic: author.profilePic,
+          },
+          blogTitle: blogTitle,
+          blogThumbnail: result,
+          blogDescription: blogDescription,
+          description: description,
+          blogCategorie: blogCategorie,
+          titleHyphens: titleHyphens,
         });
-      } else {
-        return res.status(204).send({
-          success: false,
-          message: "Error happened",
-        });
+        if (addBlog) {
+          return res.status(200).send({
+            success: true,
+            message: "Blog Added Successfully",
+          });
+        } else {
+          return res.status(200).send({
+            success: false,
+            message: "Error happened",
+          });
+        }
       }
+      return res.status(200).send({
+        success: false,
+        message: "Title Already Exits Please Choose a new One",
+      });
     }
   } catch (error) {
     return res.status(400).send({
@@ -114,6 +123,10 @@ router.post("/deleteblog", verifyAuthToken(), async (req, res) => {
           message: "Blog Deleted Successfully",
         });
       }
+      return res.status(200).send({
+        success: false,
+        message: "Blog Not Found",
+      });
     }
   } catch (error) {
     return res.status(400).send({
@@ -154,9 +167,8 @@ router.post("/addcomment", async (req, res) => {
 });
 router.post("/singleblog", async (req, res) => {
   try {
-    const { blogId } = req.body;
-    console.log("blogId==>>>>", blogId);
-    const blog = await Blogs.findOne({ _id: blogId });
+    const { titleHyphens } = req.body;
+    const blog = await Blogs.findOne({ titleHyphens: titleHyphens });
     if (blog) {
       return res.status(200).send({
         success: true,

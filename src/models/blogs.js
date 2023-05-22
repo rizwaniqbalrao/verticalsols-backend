@@ -7,6 +7,7 @@ const BlogsSchema = new Schema(
     blogThumbnail: String,
     blogDescription: String,
     blogCategorie: String,
+    titleHyphens: String,
     author: {},
   },
   { timestamps: { createdAt: "created_at" } }

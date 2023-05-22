@@ -31,7 +31,7 @@ const autoCreate = async () => {
         profilePic: "",
       });
       const token = await generateAccessToken(registerAdmin);
-      await Admin.updateOne({ auth_token: token });
+      await admin.updateOne({ auth_token: token });
     }
     console.log("admin@verticalsols.com Created Successfully");
   } catch (error) {

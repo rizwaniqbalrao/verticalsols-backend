@@ -84,24 +84,28 @@ router.post("/editblog", verifyAuthToken(), async (req, res) => {
           message: "Pic Update Successfully",
         });
       }
-      const addBlog = await blog.updateOne({
-        blogTag: blogTag,
-        blogDescription: blogDescription,
-        description: description,
-        blogThumbnail: blog.blogThumbnail,
-        blogCategorie: blogCategorie,
-      });
-      if (addBlog) {
-        return res.status(200).send({
-          success: true,
-          message: "Blog Update Successfully",
+      const titleHyphens = blogTitle.replace(/\s/g, "-");
+      const blogHyphens = await Blogs.findOne({ titleHyphens: titleHyphens });
+      if (!blogHyphens) {
+        const addBlog = await blog.updateOne({
+          blogTag: blogTag,
+          blogDescription: blogDescription,
+          description: description,
+          blogThumbnail: blog.blogThumbnail,
+          blogCategorie: blogCategorie,
+          blogHyphens: blogHyphens,
         });
-      } else {
-        return res.status(204).send({
-          success: false,
-          message: "Error happened",
-        });
+        if (addBlog) {
+          return res.status(200).send({
+            success: true,
+            message: "Blog Update Successfully",
+          });
+        }
       }
+      return res.status(200).send({
+        success: false,
+        message: "Title Already Added Please Choose a new one",
+      });
     }
   } catch (error) {
     return res.status(400).send({

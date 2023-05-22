@@ -8,6 +8,7 @@ const AdminSchema = new Schema(
     auth_token: String,
     profilePic: String,
     role: String,
+    adminId: String,
   },
   { timestamps: { createdAt: "created_at" } }
 );

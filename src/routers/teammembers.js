@@ -32,6 +32,37 @@ router.post("/addmember", verifyAuthToken(), async (req, res) => {
   }
 });
 
+router.post("/editmember", verifyAuthToken(), async (req, res) => {
+  try {
+    const { teamId, name, designation, picture } = req.body;
+    const teamMember = await TeamMembers.findOne({ _id: teamId });
+    if (teamMember) {
+      const s3Image = picture ? await s3ImageUpload(picture) : "";
+      const addTeamMembers = await teamMember.updateOne({
+        name: name,
+        picture: picture ? s3Image : teamMember.picture,
+        designation: designation,
+      });
+      if (addTeamMembers) {
+        return res.status(200).send({
+          success: true,
+          message: "Member Updated Successfully",
+        });
+      } else {
+        return res.status(200).send({
+          success: false,
+          message: "Error happened",
+        });
+      }
+    }
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
 router.post("/deletemember", verifyAuthToken(), async (req, res) => {
   try {
     const { teamId } = req.body;
@@ -55,8 +86,8 @@ router.post("/deletemember", verifyAuthToken(), async (req, res) => {
 });
 router.get("/getmembers", async (req, res) => {
   try {
-    const blogs = await TeamMembers.find({});
-    res.status(200).json({ data: blogs });
+    const teamMembers = await TeamMembers.find({});
+    res.status(200).json({ data: teamMembers });
   } catch (error) {}
 });
 export default router;

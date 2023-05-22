@@ -41,19 +41,19 @@ router.post("/login", async (req, res) => {
 });
 router.post("/addsubadmin", verifyAuthToken(), async (req, res) => {
   try {
-    const { profilePic, fullName, emailAddress, password, role } = req.body;
-
+    const { fullName, emailAddress, password, role } = req.body;
     const user = await Admin.findOne({
       emailAddress: emailAddress.toLowerCase(),
     });
     if (!user) {
-      const result = await s3ImageUpload(profilePic);
+      const u_id = await getUserIdFromToken(req);
       const subAdmin = await Admin.create({
         fullName: fullName,
         emailAddress: emailAddress.toLowerCase(),
         password: await hashPassword(password),
-        profilePic: result,
+        profilePic: "",
         role: role,
+        adminId: u_id,
       });
       if (subAdmin) {
         const token = await generateAccessToken(subAdmin);
@@ -65,10 +65,32 @@ router.post("/addsubadmin", verifyAuthToken(), async (req, res) => {
         });
       }
     }
-    return res.status(203).send({
+    return res.status(200).send({
       status: false,
       message: "User Already Registered",
     });
+  } catch (error) {
+    return res.status(400).send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+
+router.post("/getsubadmin", verifyAuthToken(), async (req, res) => {
+  try {
+    const u_id = await getUserIdFromToken(req);
+    if (u_id) {
+      const subAdmin = await Admin.find({ adminId: u_id });
+      return res
+        .status(200)
+        .json({
+          status: true,
+          data: subAdmin,
+          message: "User Find Successfully",
+        });
+    }
+    return res.status(200).json({ status: false, message: "User not Found" });
   } catch (error) {
     return res.status(400).send({
       status: false,

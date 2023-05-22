@@ -19,7 +19,7 @@ router.post("/addmember", verifyAuthToken(), async (req, res) => {
         message: "Member Added Successfully",
       });
     } else {
-      return res.status(204).send({
+      return res.status(200).send({
         success: false,
         message: "Error happened",
       });

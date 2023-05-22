@@ -39,7 +39,7 @@ router.post("/addportfolio", verifyAuthToken(), async (req, res) => {
         message: "Successfully Added a Portfolio",
       });
     }
-    return res.status(202).json({
+    return res.status(200).json({
       status: false,
       message: "User Not Found",
     });
@@ -82,7 +82,7 @@ router.post("/editportfolio", verifyAuthToken(), async (req, res) => {
           message: "Portfolio Update Successfully",
         });
       } else {
-        return res.status(204).send({
+        return res.status(200).send({
           success: false,
           message: "Error happened",
         });

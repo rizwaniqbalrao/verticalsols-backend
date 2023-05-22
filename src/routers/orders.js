@@ -44,7 +44,7 @@ router.post("/createorders", async (req, res) => {
           "Message sent successfully our respondent will contact you soon",
       });
     } else {
-      return res.status(204).send({
+      return res.status(200).send({
         success: false,
         message: "Error happened",
       });

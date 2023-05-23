@@ -26,7 +26,9 @@ router.post("/addblog", verifyAuthToken(), async (req, res) => {
       const result = await s3ImageUpload(blogThumbnail);
       const titleHyphens = blogTitle.replace(/\s/g, "-");
       const blog = await Blogs.findOne({ titleHyphens: titleHyphens });
+
       if (!blog) {
+        const blogHyphens = blogCategorie.replace(/\s/g, "-");
         const addBlog = await Blogs.create({
           author: {
             fullName: author.fullName,
@@ -38,6 +40,7 @@ router.post("/addblog", verifyAuthToken(), async (req, res) => {
           description: description,
           blogCategorie: blogCategorie,
           titleHyphens: titleHyphens,
+          blogHyphens: blogHyphens,
         });
         if (addBlog) {
           return res.status(200).send({
@@ -215,17 +218,24 @@ router.post("/recentblogs", async (req, res) => {
 });
 router.post("/filtertags", async (req, res) => {
   try {
-    const { blogCategory } = req.body;
     const blog = await Blogs.find({});
     if (blog) {
-      const filterTags = blog.filter((value) => {
-        let category = value.blogCategorie === "API";
+      const filterTags = blog.map((value) => {
+        return value.blogHyphens;
+      });
+      const uniqueNames = [];
+      const encounteredNames = {};
+      filterTags.forEach((item) => {
+        if (!encounteredNames[item]) {
+          uniqueNames.push(item);
+          encounteredNames[item] = true;
+        }
       });
 
       return res.status(200).send({
         success: true,
         message: "Blog not found",
-        data: filterTags,
+        data: uniqueNames,
       });
     } else {
       return res.status(202).send({
@@ -241,4 +251,27 @@ router.post("/filtertags", async (req, res) => {
   }
 });
 
+router.post("/filterblogs", async (req, res) => {
+  try {
+    const { blogCategorie } = req.body;
+    const blog = await Blogs.find({ blogHyphens: blogCategorie });
+    if (blog) {
+      return res.status(200).send({
+        success: true,
+        message: "Blog Find successfully",
+        data: blog,
+      });
+    } else {
+      return res.status(202).send({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message,
+    });
+  }
+});
 export default router;

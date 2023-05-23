@@ -31,6 +31,7 @@ router.post("/addblog", verifyAuthToken(), async (req, res) => {
         const blogHyphens = blogCategorie.replace(/\s/g, "-");
         const addBlog = await Blogs.create({
           author: {
+            emailAddress: author.emailAddress,
             fullName: author.fullName,
             profilePic: author.profilePic,
           },
@@ -160,6 +161,26 @@ router.get("/getblogs", async (req, res) => {
   try {
     const blogs = await Blogs.find({});
     res.status(200).json({ data: blogs });
+  } catch (error) {}
+});
+router.post("/getblogsadmin", verifyAuthToken(), async (req, res) => {
+  try {
+    const u_id = await getUserIdFromToken(req);
+    const author = await Admin.findOne({ _id: u_id });
+    const email = author.emailAddress;
+    const blogs = await Blogs.find({ "author.emailAddress": email });
+    if (blogs) {
+      res.status(200).json({
+        data: blogs,
+        status: true,
+        message: "Blogs Find Successfully",
+      });
+    }
+    res.status(200).json({
+      data: blogs,
+      status: false,
+      message: "Blogs Not Found",
+    });
   } catch (error) {}
 });
 router.post("/addcomment", async (req, res) => {

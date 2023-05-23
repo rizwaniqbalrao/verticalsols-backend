@@ -31,8 +31,8 @@ router.post("/contactus", async (req, res) => {
     });
 
     if (createContactUs) {
-      //await welcomeEmail(emailAddress, fullName);
-      //await receivedEmail("info@verticalsols.com", emailAddress, fullName);
+      await welcomeEmail(emailAddress, fullName);
+      await receivedEmail("info@verticalsols.com", emailAddress, fullName);
       return res.status(200).send({
         success: true,
         message:

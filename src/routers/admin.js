@@ -102,10 +102,11 @@ router.post("/editprofile", verifyAuthToken(), async (req, res) => {
     const u_id = await getUserIdFromToken(req);
     const user = await Admin.findOne({ _id: u_id });
     if (user) {
+      const bcryptPassword = await hashPassword(password);
       const editUser = await user.updateOne({
         fullName: fullName,
         emailAddress: emailAddress,
-        password: password,
+        password: bcryptPassword,
         profilePic: profilePic
           ? await s3ImageUpload(profilePic)
           : user.profilePic,

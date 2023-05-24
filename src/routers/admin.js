@@ -82,13 +82,39 @@ router.post("/getsubadmin", verifyAuthToken(), async (req, res) => {
     const u_id = await getUserIdFromToken(req);
     if (u_id) {
       const subAdmin = await Admin.find({ adminId: u_id });
-      return res
-        .status(200)
-        .json({
-          status: true,
-          data: subAdmin,
-          message: "User Find Successfully",
-        });
+      return res.status(200).json({
+        status: true,
+        data: subAdmin,
+        message: "User Find Successfully",
+      });
+    }
+    return res.status(200).json({ status: false, message: "User not Found" });
+  } catch (error) {
+    return res.status(400).send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+router.post("/editprofile", verifyAuthToken(), async (req, res) => {
+  try {
+    const { fullName, emailAddress, password, profilePic } = req.body;
+    const u_id = await getUserIdFromToken(req);
+    const user = await Admin.findOne({ _id: u_id });
+    if (user) {
+      const editUser = await user.updateOne({
+        fullName: fullName,
+        emailAddress: emailAddress,
+        password: password,
+        profilePic: profilePic
+          ? await s3ImageUpload(profilePic)
+          : user.profilePic,
+      });
+      return res.status(200).json({
+        status: true,
+        message: "Profile Updated Successfully",
+        data: user,
+      });
     }
     return res.status(200).json({ status: false, message: "User not Found" });
   } catch (error) {
@@ -99,4 +125,20 @@ router.post("/getsubadmin", verifyAuthToken(), async (req, res) => {
   }
 });
 
+router.post("/singleuser", verifyAuthToken(), async (req, res) => {
+  try {
+    const u_id = await getUserIdFromToken(req);
+    const user = await Admin.findOne({ _id: u_id });
+    if (user) {
+      return res
+        .status(200)
+        .json({ status: true, message: "User Found Successfully", data: user });
+    }
+  } catch (error) {
+    return res.status(400).send({
+      status: false,
+      message: error.message,
+    });
+  }
+});
 export default router;

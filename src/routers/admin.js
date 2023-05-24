@@ -98,18 +98,28 @@ router.post("/getsubadmin", verifyAuthToken(), async (req, res) => {
 });
 router.post("/editprofile", verifyAuthToken(), async (req, res) => {
   try {
-    const { fullName, emailAddress, password, profilePic } = req.body;
+    const { fullName, password, profilePic } = req.body;
     const u_id = await getUserIdFromToken(req);
     const user = await Admin.findOne({ _id: u_id });
     if (user) {
-      //const bcryptPassword = password && (await hashPassword(password));
+      if (password) {
+        const bcryptPassword = await hashPassword(password);
+        const editUser = await user.updateOne({
+          fullName: fullName,
+          password: bcryptPassword,
+          profilePic: profilePic
+            ? await s3ImageUpload(profilePic)
+            : user.profilePic,
+        });
+        return res.status(200).json({
+          status: true,
+          message: "Profile Updated Successfully",
+          data: user,
+        });
+      }
 
       const editUser = await user.updateOne({
         fullName: fullName,
-        emailAddress: emailAddress,
-        password: password
-          ? await hashPassword(password)
-          : await hashPassword("123456"),
         profilePic: profilePic
           ? await s3ImageUpload(profilePic)
           : user.profilePic,

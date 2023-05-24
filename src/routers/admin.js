@@ -117,7 +117,6 @@ router.post("/editprofile", verifyAuthToken(), async (req, res) => {
           data: user,
         });
       }
-
       const editUser = await user.updateOne({
         fullName: fullName,
         profilePic: profilePic

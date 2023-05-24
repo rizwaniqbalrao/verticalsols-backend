@@ -107,7 +107,7 @@ router.post("/editprofile", verifyAuthToken(), async (req, res) => {
       const editUser = await user.updateOne({
         fullName: fullName,
         emailAddress: emailAddress,
-        password: password && (await hashPassword(password)),
+        password: password !== "" && (await hashPassword(password)),
         profilePic: profilePic
           ? await s3ImageUpload(profilePic)
           : user.profilePic,

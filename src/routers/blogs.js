@@ -256,7 +256,7 @@ router.post("/singleblog", async (req, res) => {
         data: populatedBlogs,
       });
     } else {
-      return res.status(202).send({
+      return res.status(200).send({
         success: false,
         message: "Blog not found",
       });
@@ -330,11 +330,37 @@ router.post("/filterblogs", async (req, res) => {
   try {
     const { blogCategorie } = req.body;
     const blog = await Blogs.find({ blogHyphens: blogCategorie });
+
     if (blog) {
+      const newBlog = await Blogs.aggregate([
+        {
+          $match: { blogHyphens: blogCategorie },
+        },
+        {
+          $lookup: {
+            from: "admins",
+            localField: "author",
+            foreignField: "_id",
+            as: "author",
+          },
+        },
+      ]);
+      const populatedBlogs = newBlog.map((blogs) => {
+        const authorObject = blogs.author[0];
+        return {
+          ...blogs,
+          author: {
+            fullName: authorObject.fullName,
+            profilePic: authorObject.profilePic,
+            emailAddress: authorObject.emailAddress,
+          },
+        };
+      });
+      console.log(populatedBlogs);
       return res.status(200).send({
         success: true,
-        message: "Blog Find successfully",
-        data: blog,
+        message: "Blog added successfully",
+        data: populatedBlogs,
       });
     } else {
       return res.status(202).send({

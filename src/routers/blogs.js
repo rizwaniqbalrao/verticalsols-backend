@@ -1,5 +1,6 @@
 import { Router } from "express";
 import Blogs from "../models/blogs.js";
+import { MongoClient, ObjectId } from "mongodb";
 import multer from "multer";
 //import { s3uploadImage, unlinkFile, upload } from "../utilities/aws.js";
 import { deleteImage, s3ImageUpload, s3Upload } from "../utilities/aws.js";
@@ -29,12 +30,14 @@ router.post("/addblog", verifyAuthToken(), async (req, res) => {
 
       if (!blog) {
         const blogHyphens = blogCategorie.replace(/\s/g, "-");
+        const authorId = new ObjectId(u_id);
         const addBlog = await Blogs.create({
-          author: {
-            emailAddress: author.emailAddress,
-            fullName: author.fullName,
-            profilePic: author.profilePic,
-          },
+          // author: {
+          //   emailAddress: author.emailAddress,
+          //   fullName: author.fullName,
+          //   profilePic: author.profilePic,
+          // },
+          author: authorId,
           blogTitle: blogTitle,
           blogThumbnail: result,
           blogDescription: blogDescription,
@@ -159,16 +162,42 @@ router.post("/addeditorpic", async (req, res) => {
 });
 router.get("/getblogs", async (req, res) => {
   try {
-    const blogs = await Blogs.find({});
-    res.status(200).json({ data: blogs });
+    const blog = await Blogs.aggregate([
+      {
+        $lookup: {
+          from: "admins",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+    ]);
+    if (blog) {
+      const populatedBlogs = blog.map((blogs) => {
+        const authorObject = blogs.author[0];
+        return {
+          ...blogs,
+          author: {
+            fullName: authorObject.fullName,
+            profilePic: authorObject.profilePic,
+            emailAddress: authorObject.emailAddress,
+          },
+        };
+      });
+      const reversedBlogs = [...populatedBlogs].reverse();
+      res.status(200).json({
+        status: true,
+        message: "Blogs Found Successfully",
+        data: reversedBlogs,
+      });
+    }
+    res.status(200).json({ status: false, message: "Blog Not Found" });
   } catch (error) {}
 });
 router.post("/getblogsadmin", verifyAuthToken(), async (req, res) => {
   try {
     const u_id = await getUserIdFromToken(req);
-    const author = await Admin.findOne({ _id: u_id });
-    const email = author.emailAddress;
-    const blogs = await Blogs.find({ "author.emailAddress": email });
+    const blogs = await Blogs.find({ author: new ObjectId(u_id) });
     if (blogs) {
       res.status(200).json({
         data: blogs,

@@ -225,10 +225,35 @@ router.post("/singleblog", async (req, res) => {
     const { titleHyphens } = req.body;
     const blog = await Blogs.findOne({ titleHyphens: titleHyphens });
     if (blog) {
+      const newBlog = await Blogs.aggregate([
+        {
+          $match: { _id: blog._id },
+        },
+        {
+          $lookup: {
+            from: "admins",
+            localField: "author",
+            foreignField: "_id",
+            as: "author",
+          },
+        },
+      ]);
+      const populatedBlogs = newBlog.map((blogs) => {
+        const authorObject = blogs.author[0];
+        return {
+          ...blogs,
+          author: {
+            fullName: authorObject.fullName,
+            profilePic: authorObject.profilePic,
+            emailAddress: authorObject.emailAddress,
+          },
+        };
+      });
+      console.log(populatedBlogs);
       return res.status(200).send({
         success: true,
         message: "Blog added successfully",
-        data: blog,
+        data: populatedBlogs,
       });
     } else {
       return res.status(202).send({

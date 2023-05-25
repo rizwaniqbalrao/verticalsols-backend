@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, mongoose } from "mongoose";
 
 const BlogsSchema = new Schema(
   {
@@ -9,7 +9,11 @@ const BlogsSchema = new Schema(
     blogCategorie: String,
     titleHyphens: String,
     blogHyphens: String,
-    author: {},
+    authorId: String,
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
+    },
   },
   { timestamps: { createdAt: "created_at" } }
 );

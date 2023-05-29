@@ -4,7 +4,7 @@ import sgMail from "@sendgrid/mail";
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const welcomeEmail = async (email, name, orderNumber) => {
+const welcomeEmail = async (email, name, orderNumber, planprice, planname) => {
   const msg = {
     to: email,
     from: {
@@ -855,7 +855,7 @@ const welcomeEmail = async (email, name, orderNumber) => {
                                         word-wrap: break-word;
                                       "
                                     >
-                                      <p style="line-height: 140%">Price:</p>
+                                      <p style="line-height: 140%">Product Price</p>
                                     </div>
                                   </td>
                                 </tr>
@@ -965,7 +965,7 @@ const welcomeEmail = async (email, name, orderNumber) => {
                                       "
                                     >
                                       <p style="line-height: 140%">
-                                        #${orderNumber}
+                                        #786${orderNumber}
                                       </p>
                                     </div>
                                   </td>
@@ -1044,7 +1044,7 @@ const welcomeEmail = async (email, name, orderNumber) => {
                                       "
                                     >
                                       <p style="line-height: 140%">
-                                        This is a new Text block. Change the text.
+                                       ${planname}
                                       </p>
                                     </div>
                                   </td>
@@ -1123,7 +1123,7 @@ const welcomeEmail = async (email, name, orderNumber) => {
                                       "
                                     >
                                       <p style="line-height: 140%">
-                                        This is a new Text block. Change the text.
+                                       $${planprice}
                                       </p>
                                     </div>
                                   </td>
@@ -1450,7 +1450,7 @@ const welcomeEmail = async (email, name, orderNumber) => {
                                     <div class="v-text-align" align="center">
                                       <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.unlayer.com" style="height:37px; v-text-anchor:middle; width:174px;" arcsize="11%"  stroke="f" fillcolor="#000000"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Rubik',sans-serif;"><![endif]-->
                                       <a
-                                        href="https://www.verticalsols.com"
+                                        href="https://www.verticalsols.com/contact"
                                         target="_blank"
                                         class="v-button v-size-width v-button-colors"
                                         style="

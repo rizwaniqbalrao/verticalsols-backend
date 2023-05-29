@@ -11,7 +11,6 @@ const generateAccessToken = async (_payload) => {
 
 const verifyAuthToken = () => {
   return async (req, res, next) => {
-    // console.log("req==========", req.headers["authorization"]);
     const token = req.headers["authorization"];
     if (!token) {
       return res.status(403).send({ message: "Token not found" });

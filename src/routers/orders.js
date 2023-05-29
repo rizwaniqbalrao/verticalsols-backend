@@ -31,13 +31,19 @@ router.post("/createorders", async (req, res) => {
     });
 
     if (createOrders) {
-      //   await welcomeEmail(emailAddress, fullName, orderNumber);
-      //   await receivedEmail(
-      //     "ukhanba@gmail.com",
-      //     emailAddress,
-      //     fullName,
-      //     orderNumber
-      //   );
+      await welcomeEmail(
+        emailAddress,
+        fullName,
+        orderNumber,
+        planprice,
+        planname
+      );
+      await receivedEmail(
+        "operations@verticalsols.com",
+        emailAddress,
+        fullName,
+        orderNumber
+      );
       return res.status(200).send({
         success: true,
         message:

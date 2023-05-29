@@ -1624,7 +1624,7 @@ const welcomeEmail = async (email, name, orderNumber, planprice, planname) => {
                                                 "
                                               >
                                                 <a
-                                                  href="https://facebook.com/"
+                                                  href="https://www.facebook.com/verticalsols"
                                                   title="Facebook"
                                                   target="_blank"
                                                 >
@@ -1685,7 +1685,7 @@ const welcomeEmail = async (email, name, orderNumber, planprice, planname) => {
                                                 "
                                               >
                                                 <a
-                                                  href="https://twitter.com/"
+                                                  href="https://twitter.com/VerticalSols"
                                                   title="Twitter"
                                                   target="_blank"
                                                 >
@@ -1746,7 +1746,7 @@ const welcomeEmail = async (email, name, orderNumber, planprice, planname) => {
                                                 "
                                               >
                                                 <a
-                                                  href="https://instagram.com/"
+                                                  href="https://instagram.com/verticalsolspvt?igshid=NTc4MTIwNjQ2YQ=="
                                                   title="Instagram"
                                                   target="_blank"
                                                 >
@@ -1807,7 +1807,7 @@ const welcomeEmail = async (email, name, orderNumber, planprice, planname) => {
                                                 "
                                               >
                                                 <a
-                                                  href="https://youtube.com/"
+                                                  href="https://www.youtube.com/@verticalsols"
                                                   title="YouTube"
                                                   target="_blank"
                                                 >
@@ -1936,7 +1936,9 @@ const receivedEmail = async (
   companyEmail,
   clientEmail,
   clientName,
-  orderNumber
+  orderNumber,
+  planprice,
+  planname
 ) => {
   const msg = {
     to: companyEmail,
@@ -1946,9 +1948,11 @@ const receivedEmail = async (
     },
     subject: "Welcome",
     text: `Your query recieved at vertical souls`,
-    html: `<h1>${clientEmail}</h1>
-    <p>${clientName}</p>
-    <p>${orderNumber}
+    html: `<h1>Email:${clientEmail}</h1>
+    <p>Name:${clientName}</p>
+    <p>Order Number:${orderNumber}</p>
+    <p>Plan Price:${planprice}</p>
+    <p>Plan Name:${planname}</p>
     `,
   };
   await sgMail

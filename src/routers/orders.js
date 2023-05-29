@@ -39,10 +39,12 @@ router.post("/createorders", async (req, res) => {
         planname
       );
       await receivedEmail(
-        "operations@verticalsols.com",
+        "verticalsolspvtltd@gmail.com",
         emailAddress,
         fullName,
-        orderNumber
+        orderNumber,
+        planprice,
+        planname
       );
       return res.status(200).send({
         success: true,

@@ -59,10 +59,6 @@ router.post("/updatepricing", verifyAuthToken(), async (req, res) => {
       const pricing = await Pricing.findOne({ _id: priceId });
       if (pricing) {
         const updatePricing = await pricing.updateOne({
-          author: {
-            fullName: author.fullName,
-            emailAddress: author.emailAddress,
-          },
           planCategory: planCategory,
           planPackages: planPackages,
           planPrice: planPrice,

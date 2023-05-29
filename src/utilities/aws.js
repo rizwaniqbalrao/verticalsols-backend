@@ -62,7 +62,6 @@ const deleteMultipleImage = async (fileName) => {
 
   try {
     let deletedData = await s3.deleteObjects(params).promise();
-
     return deletedData;
   } catch (error) {
     console.log(error.message);
@@ -77,7 +76,7 @@ const uploadFile = async (fileContent) => {
   const params = {
     Bucket: process.env.AWS_S3_BUCKET,
     Key: Date.now() + "." + mimeType,
-    Body: buffer, // Replace fileContent with the actual file content or a readable stream
+    Body: buffer,
     ContentType: `application/${mimeType}`,
   };
   return await s3Upload(params);

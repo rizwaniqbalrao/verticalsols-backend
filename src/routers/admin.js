@@ -155,3 +155,25 @@ router.post("/singleuser", verifyAuthToken(), async (req, res) => {
   }
 });
 export default router;
+router.post("/alluser", verifyAuthToken(), async (req, res) => {
+  try {
+    const u_id = await getUserIdFromToken(req);
+    if (u_id) {
+      const users = await Admin.find({ adminId: u_id });
+      return res.status(200).json({
+        status: true,
+        message: "Users Found Successfully",
+        data: users,
+      });
+    }
+    return res.status(200).json({
+      status: false,
+      message: "Users Not Found",
+    });
+  } catch (error) {
+    return res.status(400).send({
+      status: false,
+      message: error.message,
+    });
+  }
+});

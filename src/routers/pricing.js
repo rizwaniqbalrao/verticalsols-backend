@@ -102,3 +102,7 @@ router.get("/getallpricing", verifyAuthToken(), async (req, res) => {
   }
 });
 export default router;
+
+
+
+

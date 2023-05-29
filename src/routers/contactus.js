@@ -1,11 +1,18 @@
 import { Router } from "express";
 import { ContactUs, MakeaCall } from "../models/contactus.js";
-import { receivedEmail, welcomeEmail } from "../services/emailService.js";
+import {
+  getQuoteEmail,
+  receivedEmail,
+  welcomeEmail,
+  getQoutereceivedEmail,
+} from "../services/emailService.js";
 import { uploadFile } from "../utilities/aws.js";
+import moment from "moment";
 
 const router = Router();
 
 router.post("/contactus", async (req, res) => {
+  console.log(req.body);
   try {
     const {
       fullName,
@@ -19,6 +26,7 @@ router.post("/contactus", async (req, res) => {
     } = req.body;
 
     const result = file ? await uploadFile(file) : "";
+    console.log("this is me after image");
     const createContactUs = await ContactUs.create({
       contactType: contactType,
       fullName: fullName,
@@ -31,8 +39,14 @@ router.post("/contactus", async (req, res) => {
     });
 
     if (createContactUs) {
-      await welcomeEmail(emailAddress, fullName);
-      await receivedEmail("info@verticalsols.com", emailAddress, fullName);
+      await getQuoteEmail(emailAddress, fullName);
+      await getQoutereceivedEmail(
+        "verticalsolspvtltd@gmail.com",
+        emailAddress,
+        fullName,
+        selectRequirments,
+        date
+      );
       return res.status(200).send({
         success: true,
         message:
@@ -64,8 +78,15 @@ router.post("/makeacall", async (req, res) => {
     });
 
     if (createMakeCall) {
-      await welcomeEmail(emailAddress, fullName);
-      await receivedEmail("info@verticalsols.com", emailAddress, fullName);
+      await getQuoteEmail(emailAddress, fullName);
+      const momentDate = moment(date).format("YYYY-MM-DD HH:mm")
+      await getQoutereceivedEmail(
+        "verticalsolspvtltd@gmail.com",
+        emailAddress,
+        fullName,
+        "",
+        momentDate
+      );
       return res.status(200).send({
         success: true,
         message:

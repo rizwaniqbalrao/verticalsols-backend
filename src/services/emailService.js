@@ -4,7 +4,7 @@ import sgMail from "@sendgrid/mail";
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
- const welcomeEmail = async (email, name, orderNumber) => {
+const welcomeEmail = async (email, name, orderNumber, planprice, planname) => {
   const msg = {
     to: email,
     from: {
@@ -821,7 +821,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
                                         word-wrap: break-word;
                                       "
                                     >
-                                      <p style="line-height: 140%">Price:</p>
+                                      <p style="line-height: 140%">Product Price</p>
                                     </div>
                                   </td>
                                 </tr>
@@ -931,7 +931,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
                                       "
                                     >
                                       <p style="line-height: 140%">
-                                        #${orderNumber}
+                                        #786${orderNumber}
                                       </p>
                                     </div>
                                   </td>
@@ -1010,7 +1010,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
                                       "
                                     >
                                       <p style="line-height: 140%">
-                                        This is a new Text block. Change the text.
+                                       ${planname}
                                       </p>
                                     </div>
                                   </td>
@@ -1089,7 +1089,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
                                       "
                                     >
                                       <p style="line-height: 140%">
-                                        This is a new Text block. Change the text.
+                                       $${planprice}
                                       </p>
                                     </div>
                                   </td>
@@ -1416,7 +1416,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
                                     <div class="v-text-align" align="center">
                                       <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.unlayer.com" style="height:37px; v-text-anchor:middle; width:174px;" arcsize="11%"  stroke="f" fillcolor="#000000"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Rubik',sans-serif;"><![endif]-->
                                       <a
-                                        href="https://www.verticalsols.com"
+                                        href="https://www.verticalsols.com/contact"
                                         target="_blank"
                                         class="v-button v-size-width v-button-colors"
                                         style="
@@ -1590,7 +1590,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
                                                 "
                                               >
                                                 <a
-                                                  href="https://facebook.com/"
+                                                  href="https://www.facebook.com/verticalsols"
                                                   title="Facebook"
                                                   target="_blank"
                                                 >
@@ -1651,7 +1651,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
                                                 "
                                               >
                                                 <a
-                                                  href="https://twitter.com/"
+                                                  href="https://twitter.com/VerticalSols"
                                                   title="Twitter"
                                                   target="_blank"
                                                 >
@@ -1712,7 +1712,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
                                                 "
                                               >
                                                 <a
-                                                  href="https://instagram.com/"
+                                                  href="https://instagram.com/verticalsolspvt?igshid=NTc4MTIwNjQ2YQ=="
                                                   title="Instagram"
                                                   target="_blank"
                                                 >
@@ -1773,7 +1773,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
                                                 "
                                               >
                                                 <a
-                                                  href="https://youtube.com/"
+                                                  href="https://www.youtube.com/@verticalsols"
                                                   title="YouTube"
                                                   target="_blank"
                                                 >
@@ -1902,7 +1902,9 @@ const receivedEmail = async (
   companyEmail,
   clientEmail,
   clientName,
-  orderNumber
+  orderNumber,
+  planprice,
+  planname
 ) => {
   const msg = {
     to: companyEmail,
@@ -1912,9 +1914,11 @@ const receivedEmail = async (
     },
     subject: "Welcome",
     text: `Your query recieved at vertical souls`,
-    html: `<h1>${clientEmail}</h1>
-    <p>${clientName}</p>
-    <p>${orderNumber}
+    html: `<h1>Email:${clientEmail}</h1>
+    <p>Name:${clientName}</p>
+    <p>Order Number:${orderNumber}</p>
+    <p>Plan Price:${planprice}</p>
+    <p>Plan Name:${planname}</p>
     `,
   };
   await sgMail

@@ -154,7 +154,7 @@ router.post("/singleuser", verifyAuthToken(), async (req, res) => {
     });
   }
 });
-export default router;
+
 router.post("/alluser", verifyAuthToken(), async (req, res) => {
   try {
     const u_id = await getUserIdFromToken(req);
@@ -177,3 +177,4 @@ router.post("/alluser", verifyAuthToken(), async (req, res) => {
     });
   }
 });
+export default router;

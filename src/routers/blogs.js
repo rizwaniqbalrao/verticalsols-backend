@@ -180,13 +180,13 @@ router.get("/getblogs", async (req, res) => {
         };
       });
       const reversedBlogs = [...populatedBlogs].reverse();
-      res.status(200).json({
+      return res.status(200).json({
         status: true,
         message: "Blogs Found Successfully",
         data: reversedBlogs,
       });
     }
-    res.status(200).json({ status: false, message: "Blog Not Found" });
+    return res.status(200).json({ status: false, message: "Blog Not Found" });
   } catch (error) {
     return res.status(400).send({
       success: false,
@@ -250,7 +250,7 @@ router.post("/singleblog", async (req, res) => {
           },
         };
       });
-      console.log(populatedBlogs);
+
       return res.status(200).send({
         success: true,
         message: "Blog added successfully",
@@ -270,7 +270,7 @@ router.post("/singleblog", async (req, res) => {
   }
 });
 router.post("/recentblogs", async (req, res) => {
-  const {sliceNumber} = req.body;
+  const { sliceNumber } = req.body;
   try {
     const blog = await Blogs.aggregate([
       {
@@ -295,42 +295,23 @@ router.post("/recentblogs", async (req, res) => {
         };
       });
       const reversedBlogs = [...populatedBlogs].reverse();
-      const  slicedBologs = reversedBlogs.slice(-`${sliceNumber}`)
-      res.status(200).json({
-        status: true,
-        message: "Blogs Found Successfully",
-        data: slicedBologs,
-      });
+      const slicedBologs = reversedBlogs.slice(-`${sliceNumber}`);
+      if (reversedBlogs) {
+        return res.status(200).json({
+          status: true,
+          message: "Blogs Found Successfully",
+          data: slicedBologs,
+        });
+      }
+    } else {
+      return res.status(200).json({ status: false, message: "Blog Not Found" });
     }
-    return res.status(200).json({ status: false, message: "Blog Not Found" });
   } catch (error) {
     return res.status(400).send({
       success: false,
       message: error.message,
     });
   }
-
-  /* try {
-    const blog = await Blogs.find({});
-    if (blog) {
-      const recentBlogs = blog.slice(-`${sliceNumber}`);
-      return res.status(200).send({
-        success: true,
-        message: "Blog not found",
-        data: recentBlogs,
-      });
-    } else {
-      return res.status(202).send({
-        success: false,
-        message: "Blog not found",
-      });
-    }
-  } catch (error) {
-    return res.status(400).send({
-      success: false,
-      message: error.message,
-    });
-  } */
 });
 
 router.post("/filtertags", async (req, res) => {
@@ -398,7 +379,7 @@ router.post("/filterblogs", async (req, res) => {
           },
         };
       });
-      console.log(populatedBlogs);
+
       return res.status(200).send({
         success: true,
         message: "Blog added successfully",

@@ -187,8 +187,14 @@ router.get("/getblogs", async (req, res) => {
       });
     }
     res.status(200).json({ status: false, message: "Blog Not Found" });
-  } catch (error) {}
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message,
+    });
+  }
 });
+
 router.post("/getblogsadmin", verifyAuthToken(), async (req, res) => {
   try {
     const u_id = await getUserIdFromToken(req);
@@ -264,10 +270,50 @@ router.post("/singleblog", async (req, res) => {
   }
 });
 router.post("/recentblogs", async (req, res) => {
+  const {sliceNumber} = req.body;
   try {
+    const blog = await Blogs.aggregate([
+      {
+        $lookup: {
+          from: "admins",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+    ]);
+    if (blog) {
+      const populatedBlogs = blog.map((blogs) => {
+        const authorObject = blogs.author[0];
+        return {
+          ...blogs,
+          author: {
+            fullName: authorObject.fullName,
+            profilePic: authorObject.profilePic,
+            emailAddress: authorObject.emailAddress,
+          },
+        };
+      });
+      const reversedBlogs = [...populatedBlogs].reverse();
+      const  slicedBologs = reversedBlogs.slice(-`${sliceNumber}`)
+      res.status(200).json({
+        status: true,
+        message: "Blogs Found Successfully",
+        data: slicedBologs,
+      });
+    }
+    return res.status(200).json({ status: false, message: "Blog Not Found" });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message,
+    });
+  }
+
+  /* try {
     const blog = await Blogs.find({});
     if (blog) {
-      const recentBlogs = blog.slice(-3);
+      const recentBlogs = blog.slice(-`${sliceNumber}`);
       return res.status(200).send({
         success: true,
         message: "Blog not found",
@@ -284,8 +330,9 @@ router.post("/recentblogs", async (req, res) => {
       success: false,
       message: error.message,
     });
-  }
+  } */
 });
+
 router.post("/filtertags", async (req, res) => {
   try {
     const blog = await Blogs.find({});

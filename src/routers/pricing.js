@@ -52,7 +52,7 @@ router.post("/addpriceplan", verifyAuthToken(), async (req, res) => {
 });
 router.post("/updatepricing", verifyAuthToken(), async (req, res) => {
   try {
-    const { priceId } = req.body;
+    const { priceId, planCategory, planPackages, planPrice } = req.body;
     const u_id = await getUserIdFromToken(req);
     const author = await Admin.findOne({ _id: u_id });
     if (author) {
@@ -66,7 +66,7 @@ router.post("/updatepricing", verifyAuthToken(), async (req, res) => {
       }
       return res.status(200).json({
         status: true,
-        message: "Successfully Added a pricing plan",
+        message: "Successfully Updated  pricing plan",
       });
     }
   } catch (error) {
@@ -98,7 +98,3 @@ router.get("/getallpricing", verifyAuthToken(), async (req, res) => {
   }
 });
 export default router;
-
-
-
-

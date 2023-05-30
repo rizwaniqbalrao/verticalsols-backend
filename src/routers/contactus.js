@@ -5,9 +5,11 @@ import {
   receivedEmail,
   welcomeEmail,
   getQoutereceivedEmail,
+  newsLetterEmail,
 } from "../services/emailService.js";
 import { uploadFile } from "../utilities/aws.js";
 import moment from "moment";
+import NewsLetter from "../models/newsletter.js";
 
 const router = Router();
 
@@ -26,7 +28,6 @@ router.post("/contactus", async (req, res) => {
     } = req.body;
 
     const result = file ? await uploadFile(file) : "";
-    console.log("this is me after image");
     const createContactUs = await ContactUs.create({
       contactType: contactType,
       fullName: fullName,
@@ -79,7 +80,7 @@ router.post("/makeacall", async (req, res) => {
 
     if (createMakeCall) {
       await getQuoteEmail(emailAddress, fullName);
-      const momentDate = moment(date).format("YYYY-MM-DD HH:mm")
+      const momentDate = moment(date).format("YYYY-MM-DD HH:mm");
       await getQoutereceivedEmail(
         "verticalsolspvtltd@gmail.com",
         emailAddress,
@@ -130,6 +131,35 @@ router.get("/getquote", async (req, res) => {
       data: reversedArray,
       message: "Message sent successfully our respondent will contact you soon",
     });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+router.post("/newsletter", async (req, res) => {
+  try {
+    const { emailAddress } = req.body;
+    const subscriber = await NewsLetter.findOne({ emailAddress: emailAddress });
+    if (!subscriber) {
+      const newsLetter = await NewsLetter.create({
+        emailAddress: emailAddress,
+      });
+      if (newsLetter) {
+        await newsLetterEmail(emailAddress);
+        return res.status(200).send({
+          success: true,
+          message: "Successfully Subscribe our Newsletter",
+        });
+      }
+    } else {
+      return res.status(200).send({
+        success: false,
+        message: "You Already Subscribe our Newsletter",
+      });
+    }
   } catch (error) {
     return res.status(400).send({
       success: false,

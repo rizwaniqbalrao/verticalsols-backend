@@ -319,7 +319,7 @@ router.post("/filtertags", async (req, res) => {
     const blog = await Blogs.find({});
     if (blog) {
       const filterTags = blog.map((value) => {
-        return value.blogHyphens.toLowerCase();
+        return value.blogHyphens.toUpperCase();
       });
       const uniqueNames = [];
       const encounteredNames = {};

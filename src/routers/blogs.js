@@ -29,7 +29,7 @@ router.post("/addblog", verifyAuthToken(), async (req, res) => {
       const blog = await Blogs.findOne({ titleHyphens: titleHyphens });
 
       if (!blog) {
-        const blogHyphens = blogCategorie.replace(/\s/g, "-").toLowerCase();
+        const blogHyphens = blogCategorie.replace(/\s/g, "-");
         const authorId = new ObjectId(u_id);
         const addBlog = await Blogs.create({
           author: authorId,

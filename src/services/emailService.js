@@ -751,6 +751,42 @@ const welcomeEmail = async (email, name, orderNumber, planprice, planname) => {
                           ><!--<![endif]-->
                             
     
+                          <table
+                          style="font-family: 'Rubik', sans-serif"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          border="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                class="v-container-padding-padding"
+                                style="
+                                  overflow-wrap: break-word;
+                                  word-break: break-word;
+                                  padding: 10px;
+                                  font-family: 'Rubik', sans-serif;
+                                "
+                                align="left"
+                              >
+                              
+                                <div
+                                  class="v-color v-text-align"
+                                  style="
+                                    font-size: 14px;
+                                    line-height: 140%;
+                                    text-align: center;
+                                    word-wrap: break-word;
+                                  "
+                                >
+                                  <p style="line-height: 140%">Plan Name</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                             <!--[if (!mso)&(!IE)]><!-->
                           </div>
                           <!--<![endif]-->
@@ -792,6 +828,7 @@ const welcomeEmail = async (email, name, orderNumber, planprice, planname) => {
                               -moz-border-radius: 0px;
                             "
                           ><!--<![endif]-->
+                          
                             <table
                               style="font-family: 'Rubik', sans-serif"
                               role="presentation"
@@ -812,6 +849,7 @@ const welcomeEmail = async (email, name, orderNumber, planprice, planname) => {
                                     "
                                     align="left"
                                   >
+                                  
                                     <div
                                       class="v-color v-text-align"
                                       style="
@@ -1253,20 +1291,7 @@ const welcomeEmail = async (email, name, orderNumber, planprice, planname) => {
                                     "
                                     align="left"
                                   >
-                                    <h1
-                                      class="v-color v-text-align"
-                                      style="
-                                        margin: 0px;
-                                        color: #000000;
-                                        line-height: 140%;
-                                        text-align: left;
-                                        word-wrap: break-word;
-                                        font-size: 22px;
-                                        font-weight: 400;
-                                      "
-                                    >
-                                      Total:
-                                    </h1>
+                                   
                                   </td>
                                 </tr>
                               </tbody>

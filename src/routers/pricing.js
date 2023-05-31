@@ -52,14 +52,13 @@ router.post("/addpriceplan", verifyAuthToken(), async (req, res) => {
 });
 router.post("/updatepricing", verifyAuthToken(), async (req, res) => {
   try {
-    const { priceId, planCategory, planPackages, planPrice } = req.body;
+    const { priceId, planPackages, planPrice } = req.body;
     const u_id = await getUserIdFromToken(req);
     const author = await Admin.findOne({ _id: u_id });
     if (author) {
       const pricing = await Pricing.findOne({ _id: priceId });
       if (pricing) {
         const updatePricing = await pricing.updateOne({
-          planCategory: planCategory,
           planPackages: planPackages,
           planPrice: planPrice,
         });

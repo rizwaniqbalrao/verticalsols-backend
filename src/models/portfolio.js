@@ -5,7 +5,7 @@ const PortfolioSchema = new Schema(
     portfolioCategorie: String,
     portfolioThumbnail: String,
     portfolioDescription: String,
-    description: String,
+    description: String, 
     portfolioTitle: String,
     author: {},
   },

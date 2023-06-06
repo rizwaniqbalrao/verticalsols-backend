@@ -4,7 +4,15 @@ import sgMail from "@sendgrid/mail";
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const welcomeEmail = async (email, name, orderNumber, planprice, planname) => {
+const welcomeEmail = async (
+  email,
+  name,
+
+  orderNumber,
+  planprice,
+  phoneNumber,
+  planname
+) => {
   const msg = {
     to: email,
     from: {
@@ -1929,8 +1937,11 @@ const receivedEmail = async (
   clientName,
   orderNumber,
   planprice,
+  phoneNumber,
+
   planname
 ) => {
+  console.log(phoneNumber);
   const msg = {
     to: companyEmail,
     from: {
@@ -1944,6 +1955,8 @@ const receivedEmail = async (
     <p>Order Number:${orderNumber}</p>
     <p>Plan Price:${planprice}</p>
     <p>Plan Name:${planname}</p>
+    <p>Phone Number:${phoneNumber}</p>
+    
     `,
   };
   await sgMail

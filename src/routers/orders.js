@@ -9,11 +9,12 @@ router.post("/createorders", async (req, res) => {
     const {
       fullName,
       emailAddress,
-      phoneNumber,
+
       selectRequirments,
       writeMessage,
       planname,
       planprice,
+      phoneNumber,
     } = req.body;
     const randomCode = async () => {
       return Math.floor(100000 + Math.random() * 900000);
@@ -22,28 +23,33 @@ router.post("/createorders", async (req, res) => {
     const createOrders = await Orders.create({
       fullName: fullName,
       emailAddress: emailAddress,
-      phoneNumber: phoneNumber,
+
       selectRequirments: selectRequirments,
       writeMessage: writeMessage,
       planname: planname,
       planprice: planprice,
       orderNumber: orderNumber,
+      phoneNumber: phoneNumber,
     });
 
     if (createOrders) {
       await welcomeEmail(
         emailAddress,
         fullName,
+
         orderNumber,
         planprice,
+        phoneNumber,
         planname
       );
       await receivedEmail(
         "verticalsolspvtltd@gmail.com",
         emailAddress,
         fullName,
+
         orderNumber,
         planprice,
+        phoneNumber,
         planname
       );
       return res.status(200).send({

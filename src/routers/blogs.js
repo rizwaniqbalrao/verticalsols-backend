@@ -25,7 +25,10 @@ router.post("/addblog", verifyAuthToken(), async (req, res) => {
     if (u_id) {
       const author = await Admin.findOne({ _id: u_id });
       const result = await s3ImageUpload(blogThumbnail);
-      const titleHyphens = blogTitle.replace(/\s/g, "-");
+      const titleHyphens = blogTitle
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s/g, "-")
+        .toLowerCase();
       const blog = await Blogs.findOne({ titleHyphens: titleHyphens });
 
       if (!blog) {

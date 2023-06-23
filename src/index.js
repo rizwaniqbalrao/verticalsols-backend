@@ -7,8 +7,9 @@ import blogs from "./routers/blogs.js";
 import teammembers from "./routers/teammembers.js";
 import pricingplan from "./routers/pricing.js";
 import portfolio from "./routers/portfolio.js";
-import product from "./routers/product.js" ;
+import product from "./routers/product.js";
 import order from "./routers/orders.js";
+import productpricing from "./routers/productPricing.js";
 import { connectDB } from "./middleware/db.js";
 import Admin from "./models/admin.js";
 import { hashPassword } from "./utilities/passwordUtils.js";
@@ -53,9 +54,9 @@ server.use("/api/blogs", blogs);
 server.use("/api/team", teammembers);
 server.use("/api/pricing", pricingplan);
 server.use("/api/portfolio", portfolio);
-server.use("/api/product" , product)
+server.use("/api/product", product);
 server.use("/api/order", order);
-
+server.use("/api/productpricing", productpricing);
 const port = process.env.PORT || 5003;
 server.listen(port, () => {
   console.log("Server listening on port " + `${port}`);

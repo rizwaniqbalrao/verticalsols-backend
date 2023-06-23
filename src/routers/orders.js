@@ -36,7 +36,6 @@ router.post("/createorders", async (req, res) => {
       await welcomeEmail(
         emailAddress,
         fullName,
-
         orderNumber,
         planprice,
         phoneNumber,
@@ -46,7 +45,6 @@ router.post("/createorders", async (req, res) => {
         "verticalsolspvtltd@gmail.com",
         emailAddress,
         fullName,
-
         orderNumber,
         planprice,
         phoneNumber,

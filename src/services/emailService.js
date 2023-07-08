@@ -3858,9 +3858,7 @@ const productPricingreceivedEmail = async (
   clientName,
   projectRequirmentReady,
   peopleWorking,
-  appName,
-  
- 
+  appName
 ) => {
   console.log(phoneNumber);
   const msg = {
@@ -5214,6 +5212,38 @@ const getQoutereceivedEmail = async (
       console.error(error);
     });
 };
+const realEstatereceivedEmail = async (
+  companyEmail,
+  clientEmail,
+  clientName,
+  phoneNumber,
+  writeMessage
+) => {
+  const msg = {
+    to: companyEmail,
+    from: {
+      name: "Verticalsols Pvt. Ltd.",
+      email: "operations@verticalsols.com",
+    },
+    subject: "Welcome",
+    text: `Your query recieved at vertical souls`,
+    html: `<h2>Get A Qoute Email</h2>
+    <p>Client Email : ${clientEmail}</p>
+    <p>Client Name : ${clientName}</p>
+    <p>Phone Number : ${phoneNumber}</p>
+    <p>Message : ${writeMessage}</p>
+    `,
+  };
+  await sgMail
+    .send(msg)
+    .then((response) => {
+      console.log(response[0].statusCode);
+      console.log(response[0].headers);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
 
 const newsLetterEmail = async (emailAddress) => {
   const msg = {
@@ -6489,5 +6519,6 @@ export {
   getQoutereceivedEmail,
   newsLetterEmail,
   productPricingwelcomeEmail,
-  productPricingreceivedEmail
+  productPricingreceivedEmail,
+  realEstatereceivedEmail,
 };

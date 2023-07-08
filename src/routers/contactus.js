@@ -6,6 +6,7 @@ import {
   welcomeEmail,
   getQoutereceivedEmail,
   newsLetterEmail,
+  realEstatereceivedEmail,
 } from "../services/emailService.js";
 import { uploadFile } from "../utilities/aws.js";
 import moment from "moment";
@@ -66,6 +67,58 @@ router.post("/contactus", async (req, res) => {
     });
   }
 });
+
+router.post("/offshoredevelopment", async (req, res) => {
+  console.log(req.body);
+  try {
+    const {
+      fullName,
+      emailAddress,
+      phoneNumber,
+      writeMessage,
+      
+      contactType,
+    } = req.body;
+
+    // const result = file ? await uploadFile(file) : "";
+    const createContactUs = await ContactUs.create({
+      contactType: contactType,
+      fullName: fullName,
+      emailAddress: emailAddress,
+      phoneNumber: phoneNumber,
+      writeMessage: writeMessage,
+      // file: result,
+      // date: date,
+    });
+
+    if (createContactUs) {
+      await getQuoteEmail(emailAddress, fullName);
+      await realEstatereceivedEmail(
+        "verticalsolspvtltd@gmail.com",
+        emailAddress,
+        fullName,
+        phoneNumber,
+        writeMessage
+      );
+      return res.status(200).send({
+        success: true,
+        message:
+          "Message sent successfully our respondent will contact you soon",
+      });
+    } else {
+      return res.status(200).send({
+        success: false,
+        message: "Error happened",
+      });
+    }
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
 router.post("/makeacall", async (req, res) => {
   try {
     const { fullName, emailAddress, phoneNumber, writeMessage, date } =
